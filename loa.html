@@ -79,32 +79,40 @@
   </div>
 
   <script>
-// Function to get access token from URL
-function getAccessToken() {
-  const hash = window.location.hash;
-  if (!hash) return null;
+window.onload = function () {
 
-  const params = new URLSearchParams(hash.substring(1));
-  return params.get("access_token");
-}
+  function getTokenFromUrl() {
+    const hash = window.location.hash;
+    if (!hash) return null;
 
-const token = getAccessToken();
+    const params = new URLSearchParams(hash.substring(1));
+    return params.get("access_token");
+  }
 
-if (token) {
-  // Save login so refresh keeps you logged in
-  localStorage.setItem("discord_token", token);
-}
+  const token = getTokenFromUrl();
 
-// Check stored login
-const savedToken = localStorage.getItem("discord_token");
+  if (token) {
+    // Save token so user stays logged in
+    localStorage.setItem("discord_token", token);
 
-if (savedToken) {
-  document.getElementById("loginDiv").style.display = "none";
-  document.getElementById("formDiv").style.display = "block";
-} else {
-  document.getElementById("loginDiv").style.display = "block";
-  document.getElementById("formDiv").style.display = "none";
-}
+    // Remove token from URL so it doesn't loop
+    history.replaceState(null, null, window.location.pathname);
+  }
+
+  const savedToken = localStorage.getItem("discord_token");
+
+  const loginDiv = document.getElementById("loginDiv");
+  const formDiv = document.getElementById("formDiv");
+
+  if (savedToken) {
+    loginDiv.style.display = "none";
+    formDiv.style.display = "block";
+  } else {
+    loginDiv.style.display = "block";
+    formDiv.style.display = "none";
+  }
+
+};
 </script>
     
 </body>
