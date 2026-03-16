@@ -2,22 +2,170 @@
 <html>
 
 <head>
-<title>ERLC Staff Portal</title>
-<link rel="stylesheet" href="style.css">
+  <title>NYCRPX Staff Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      width: 220px;
+      height: 100%;
+      background: #0c1b33;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      color: #00aaff;
+      margin-bottom: 30px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 24px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #e0f0ff;
+      text-decoration: none;
+      margin: 15px 0;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar a:hover {
+      background: #005f99;
+      color: #ffffff;
+    }
+
+    /* Main content */
+    .main {
+      margin-left: 240px;
+      padding: 40px;
+      background: #001529;
+      min-height: 100vh;
+      color: #e0f0ff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #00aaff;
+      margin-bottom: 30px;
+    }
+
+    /* Dashboard cards */
+    .dashboard {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #003366;
+      flex: 1 1 200px;
+      min-width: 200px;
+      max-width: 300px;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: #005f99;
+    }
+
+    .card h3 {
+      color: #00d0ff;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .card p {
+      color: #cceeff;
+      font-size: 14px;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: #00aaff;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .card a:hover {
+      background: #0080cc;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .dashboard {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>ERLC Staff Portal</h1>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>NYCRPX</h2>
+    <a href="index.html">Dashboard</a>
+    <a href="logs.html">Punishment Logs</a>
+    <a href="loa.html">LOA Requests</a>
+    <a href="docs.html">Documents</a>
+  </div>
 
-<div class="card">
-<h2>Staff Dashboard</h2>
+  <!-- Main Content -->
+  <div class="main">
+    <h1>Staff Dashboard</h1>
 
-<button onclick="location.href='logs.html'">Punishment Logs</button>
-<button onclick="location.href='loa.html'">LOA Requests</button>
-<button onclick="location.href='docs.html'">Documents</button>
+    <div class="dashboard">
+      <div class="card">
+        <h3>Punishment Logs</h3>
+        <p>View and manage all staff punishments.</p>
+        <a href="logs.html">Open</a>
+      </div>
 
-</div>
+      <div class="card">
+        <h3>LOA Requests</h3>
+        <p>Review and approve leave of absence requests.</p>
+        <a href="loa.html">Open</a>
+      </div>
+
+      <div class="card">
+        <h3>Staff Documents</h3>
+        <p>Access server guides and training documents.</p>
+        <a href="docs.html">Open</a>
+      </div>
+
+      <div class="card">
+        <h3>Other Tools</h3>
+        <p>Additional staff resources and utilities.</p>
+        <a href="#">Open</a>
+      </div>
+    </div>
+
+  </div>
 
 </body>
 </html>
