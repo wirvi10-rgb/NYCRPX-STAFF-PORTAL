@@ -2,118 +2,176 @@
 <html>
 
 <head>
-  <title>LOA Requests - NYCRPX</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Card styling for LOA form */
-    .card {
-      background: linear-gradient(135deg, #005f99, #00aaff);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      color: #fff;
-      max-width: 600px;
-      margin: 50px auto;
-      text-align: center;
-    }
+<title>NYCRPX Staff Portal - LOA</title>
 
-    .card input,
-    .card textarea,
-    .card button {
-      width: 90%;
-      margin: 10px 0;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
+<style>
+body{
+font-family:Arial;
+background:#0f172a;
+margin:0;
+color:white;
+}
 
-    .card button {
-      background: #00d0ff;
-      color: #001529;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+.card{
+background:linear-gradient(135deg,#005f99,#00aaff);
+padding:30px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,.6);
+max-width:600px;
+margin:80px auto;
+text-align:center;
+}
 
-    .card button:hover {
-      background: #0080cc;
-      color: #fff;
-    }
+input,textarea{
+width:90%;
+margin:10px 0;
+padding:12px;
+border-radius:8px;
+border:none;
+font-size:15px;
+}
 
-    #loginBtn {
-      display: inline-block;
-      padding: 12px 25px;
-      background: #00d0ff;
-      color: #001529;
-      font-weight: bold;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: 0.3s;
-    }
+button{
+width:95%;
+padding:12px;
+background:#00d0ff;
+color:#001529;
+font-weight:bold;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
 
-    #loginBtn:hover {
-      background: #0080cc;
-      color: #fff;
-    }
-  </style>
+button:hover{
+background:#0080cc;
+color:white;
+}
+
+#loginBtn{
+display:inline-block;
+padding:14px 30px;
+background:#00d0ff;
+color:#001529;
+font-weight:bold;
+border-radius:8px;
+text-decoration:none;
+}
+
+#loginBtn:hover{
+background:#0080cc;
+color:white;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Login Div (shows if user is not logged in) -->
-  <a id="loginBtn" href="https://discord.com/oauth2/authorize?client_id=1483061297699360818&redirect_uri=https%3A%2F%2Fwirvi10-rgb.github.io%2FNYCRPX-STAFF-PORTAL%2Floa.html&response_type=token&scope=identify">
-  Login with Discord
+<div id="loginDiv" class="card">
+
+<h2>Staff Login Required</h2>
+<p>Please login with Discord to submit an LOA.</p>
+
+<a id="loginBtn"
+href="https://discord.com/oauth2/authorize?client_id=1483061297699360818&redirect_uri=https%3A%2F%2Fwirvi10-rgb.github.io%2FNYCRPX-STAFF-PORTAL%2Floa.html&response_type=token&scope=identify">
+Login with Discord
 </a>
 
-  <!-- LOA Form Div (hidden until login) -->
-  <div id="formDiv" class="card" style="display:none;">
-    <h2>Submit LOA Request</h2>
-    <form id="loaForm">
-      <input type="text" name="name" placeholder="Staff Name" required>
-      <input type="date" name="start" required>
-      <input type="date" name="end" required>
-      <textarea name="reason" placeholder="Reason" required></textarea>
-      <button type="submit">Submit LOA</button>
-    </form>
-  </div>
+</div>
 
-  <script>
-window.onload = function () {
+<div id="formDiv" class="card" style="display:none;">
 
-  function getTokenFromUrl() {
-    const hash = window.location.hash;
-    if (!hash) return null;
+<h2>Submit LOA Request</h2>
 
-    const params = new URLSearchParams(hash.substring(1));
-    return params.get("access_token");
-  }
+<form id="loaForm">
 
-  const token = getTokenFromUrl();
+<input type="text" id="name" placeholder="Staff Name" required>
 
-  if (token) {
-    // Save token so user stays logged in
-    localStorage.setItem("discord_token", token);
+<input type="date" id="start" required>
 
-    // Remove token from URL so it doesn't loop
-    history.replaceState(null, null, window.location.pathname);
-  }
+<input type="date" id="end" required>
 
-  const savedToken = localStorage.getItem("discord_token");
+<textarea id="reason" placeholder="Reason for LOA" required></textarea>
 
-  const loginDiv = document.getElementById("loginDiv");
-  const formDiv = document.getElementById("formDiv");
+<button type="submit">Submit LOA</button>
 
-  if (savedToken) {
-    loginDiv.style.display = "none";
-    formDiv.style.display = "block";
-  } else {
-    loginDiv.style.display = "block";
-    formDiv.style.display = "none";
-  }
+</form>
 
-};
+</div>
+
+<script>
+
+function getToken(){
+const hash = window.location.hash
+if(!hash) return null
+const params = new URLSearchParams(hash.substring(1))
+return params.get("access_token")
+}
+
+const token = getToken()
+
+if(token){
+
+localStorage.setItem("discord_token",token)
+
+/* remove token from URL */
+window.location.href = window.location.pathname
+
+}
+
+const savedToken = localStorage.getItem("discord_token")
+
+const loginDiv = document.getElementById("loginDiv")
+const formDiv = document.getElementById("formDiv")
+
+if(savedToken){
+
+loginDiv.style.display="none"
+formDiv.style.display="block"
+
+}else{
+
+loginDiv.style.display="block"
+formDiv.style.display="none"
+
+}
+
+/* webhook submit */
+
+const form = document.getElementById("loaForm")
+
+form.addEventListener("submit", async (e)=>{
+
+e.preventDefault()
+
+const name=document.getElementById("name").value
+const start=document.getElementById("start").value
+const end=document.getElementById("end").value
+const reason=document.getElementById("reason").value
+
+const webhook="PASTE_WEBHOOK_URL_HERE"
+
+const data={
+content:
+"📋 **NEW LOA REQUEST**\n"+
+"👤 Staff: "+name+"\n"+
+"📅 Start: "+start+"\n"+
+"📅 End: "+end+"\n"+
+"📝 Reason: "+reason
+}
+
+await fetch(webhook,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(data)
+})
+
+alert("LOA request sent!")
+
+form.reset()
+
+})
+
 </script>
-    
+
 </body>
 </html>
