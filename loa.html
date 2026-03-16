@@ -2,32 +2,125 @@
 <html>
 
 <head>
-<title>LOA Request</title>
-<link rel="stylesheet" href="style.css">
+  <title>LOA Requests - NYCRPX</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Card styling for LOA form */
+    .card {
+      background: linear-gradient(135deg, #005f99, #00aaff);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      color: #fff;
+      max-width: 600px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .card input,
+    .card textarea,
+    .card button {
+      width: 90%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .card button {
+      background: #00d0ff;
+      color: #001529;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .card button:hover {
+      background: #0080cc;
+      color: #fff;
+    }
+
+    #loginBtn {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #00d0ff;
+      color: #001529;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    #loginBtn:hover {
+      background: #0080cc;
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="main">
+  <!-- Login Div (shows if user is not logged in) -->
+  <div id="loginDiv" class="card">
+    <h2>Login Required</h2>
+    <a id="loginBtn" href="https://discord.com/oauth2/authorize?client_id=1483061297699360818&redirect_uri=https%3A%2F%2Fnycrpx.github.io%2Floa.html&response_type=token&scope=identify">
+      Login with Discord
+    </a>
+  </div>
 
-<h1>LOA Request</h1>
+  <!-- LOA Form Div (hidden until login) -->
+  <div id="formDiv" class="card" style="display:none;">
+    <h2>Submit LOA Request</h2>
+    <form id="loaForm">
+      <input type="text" name="name" placeholder="Staff Name" required>
+      <input type="date" name="start" required>
+      <input type="date" name="end" required>
+      <textarea name="reason" placeholder="Reason" required></textarea>
+      <button type="submit">Submit LOA</button>
+    </form>
+  </div>
 
-<form action="https://formspree.io/f/mreyypag" method="POST">
+  <script>
+    // Check if user is logged in with Discord
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash.includes("access_token")) {
+        // User logged in
+        document.getElementById('loginDiv').style.display = 'none';
+        document.getElementById('formDiv').style.display = 'block';
+      } else {
+        // Not logged in
+        document.getElementById('loginDiv').style.display = 'block';
+        document.getElementById('formDiv').style.display = 'none';
+      }
+    });
 
-<label>Discord Username</label><br>
-<input type="text" name="user"><br><br>
+    // Send LOA form to Discord webhook
+    const form = document.getElementById('loaForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        username: form.name.value,
+        content: `**LOA Request**\nStaff: ${form.name.value}\nStart: ${form.start.value}\nEnd: ${form.end.value}\nReason: ${form.reason.value}`
+      };
 
-<label>Reason</label><br>
-<textarea name="reason"></textarea><br><br>
+      const webhookURL = "https://discord.com/api/webhooks/1483062588756459651/n6Izn62HCLeuh1Kb3VLpNrSOaqtTY9rFWBgIzv6Q5nDrhIgnnPqCaAReZn8Yju6hFM-9"; // Replace with your webhook URL
 
-<label>Days Away</label><br>
-<input type="number" name="days"><br><br>
-
-<button type="submit">Submit Request</button>
-
-</form>
-
-</div>
+      try {
+        await fetch(webhookURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        alert("LOA Request Sent!");
+        form.reset();
+      } catch (err) {
+        alert("Error sending LOA request. Check the webhook URL.");
+        console.error(err);
+      }
+    });
+  </script>
 
 </body>
 </html>
