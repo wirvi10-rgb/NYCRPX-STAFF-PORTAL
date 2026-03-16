@@ -79,45 +79,33 @@
   </div>
 
   <script>
-    // Check if user is logged in with Discord
-    window.addEventListener('load', () => {
-      const hash = window.location.hash;
-      if (hash.includes("access_token")) {
-        // User logged in
-        document.getElementById('loginDiv').style.display = 'none';
-        document.getElementById('formDiv').style.display = 'block';
-      } else {
-        // Not logged in
-        document.getElementById('loginDiv').style.display = 'block';
-        document.getElementById('formDiv').style.display = 'none';
-      }
-    });
+// Function to get access token from URL
+function getAccessToken() {
+  const hash = window.location.hash;
+  if (!hash) return null;
 
-    // Send LOA form to Discord webhook
-    const form = document.getElementById('loaForm');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = {
-        username: form.name.value,
-        content: `**LOA Request**\nStaff: ${form.name.value}\nStart: ${form.start.value}\nEnd: ${form.end.value}\nReason: ${form.reason.value}`
-      };
+  const params = new URLSearchParams(hash.substring(1));
+  return params.get("access_token");
+}
 
-      const webhookURL = "https://discord.com/api/webhooks/1483062588756459651/n6Izn62HCLeuh1Kb3VLpNrSOaqtTY9rFWBgIzv6Q5nDrhIgnnPqCaAReZn8Yju6hFM-9"; // Replace with your webhook URL
+const token = getAccessToken();
 
-      try {
-        await fetch(webhookURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        alert("LOA Request Sent!");
-        form.reset();
-      } catch (err) {
-        alert("Error sending LOA request. Check the webhook URL.");
-        console.error(err);
-      }
-    });
-  </script>
+if (token) {
+  // Save login so refresh keeps you logged in
+  localStorage.setItem("discord_token", token);
+}
 
+// Check stored login
+const savedToken = localStorage.getItem("discord_token");
+
+if (savedToken) {
+  document.getElementById("loginDiv").style.display = "none";
+  document.getElementById("formDiv").style.display = "block";
+} else {
+  document.getElementById("loginDiv").style.display = "block";
+  document.getElementById("formDiv").style.display = "none";
+}
+</script>
+    
 </body>
 </html>
